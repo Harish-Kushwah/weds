@@ -357,6 +357,85 @@ if (!reducedMotion && matchMedia('(pointer: fine)').matches) {
   card.addEventListener('pointerleave', () => { card.style.transform = ''; });
 }
 
+const downloadCardButton = document.querySelector('#download-card');
+const recipientDialog = document.querySelector('#recipient-dialog');
+const recipientForm = document.querySelector('#recipient-form');
+const recipientInput = document.querySelector('#recipient-name');
+const cardRecipient = document.querySelector('#card-recipient');
+downloadCardButton.addEventListener('click', () => {
+  recipientDialog.showModal();
+  recipientInput.focus();
+});
+document.querySelector('#recipient-dialog-close').addEventListener('click', () => recipientDialog.close());
+recipientDialog.addEventListener('click', (event) => {
+  if (event.target === recipientDialog) recipientDialog.close();
+});
+
+async function downloadInvitationCard(guestName) {
+  await document.fonts.ready;
+  const canvas = document.createElement('canvas');
+  canvas.width = 1200;
+  canvas.height = 1500;
+  const context = canvas.getContext('2d');
+  context.fillStyle = '#fbf9f3';
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.strokeStyle = '#ded8cb';
+  context.lineWidth = 2;
+  context.strokeRect(38, 38, 1124, 1424);
+  context.strokeStyle = '#d4c4a5';
+  context.lineWidth = 1;
+  context.strokeRect(58, 58, 1084, 1384);
+  const corner = (x, y, dx, dy) => {
+    context.beginPath();
+    context.moveTo(x, y + dy * 46);
+    context.lineTo(x, y);
+    context.lineTo(x + dx * 46, y);
+    context.stroke();
+  };
+  corner(78, 78, 1, 1); corner(1122, 78, -1, 1);
+  corner(78, 1422, 1, -1); corner(1122, 1422, -1, -1);
+  const centerText = (text, y, font, color, maxWidth = 1000) => {
+    context.textAlign = 'center';
+    context.fillStyle = color;
+    context.font = font;
+    context.fillText(text, 600, y, maxWidth);
+  };
+  centerText('TOGETHER WITH OUR FAMILIES', 190, '600 18px "DM Sans", sans-serif', '#7e8979');
+  centerText(`Dear ${guestName},`, 300, 'italic 30px "Playfair Display", Georgia, serif', '#842f3e');
+  centerText('✳', 395, '56px Georgia, serif', '#a39170');
+  centerText('request the pleasure of your company', 490, 'italic 30px "Playfair Display", Georgia, serif', '#7d7e72');
+  centerText('Harish & Kavitha', 600, '48px "Playfair Display", Georgia, serif', '#405c4b');
+  centerText('as we begin our forever together', 660, 'italic 27px "Playfair Display", Georgia, serif', '#7d7e72');
+  context.strokeStyle = '#ddd4c4';
+  context.beginPath(); context.moveTo(300, 735); context.lineTo(550, 735); context.moveTo(650, 735); context.lineTo(900, 735); context.stroke();
+  centerText('✦', 743, '20px Georgia, serif', '#ad8b58');
+  centerText('SATURDAY · 21 NOVEMBER 2026', 840, '600 18px "DM Sans", sans-serif', '#536351');
+  centerText('at half past four', 915, '32px "Playfair Display", Georgia, serif', '#415649');
+  centerText('THE GLASSHOUSE GARDENS', 1015, '600 19px "DM Sans", sans-serif', '#4e5c4f');
+  centerText('SONOMA VALLEY · CALIFORNIA', 1060, '17px "DM Sans", sans-serif', '#81877a');
+  centerText('DINNER, DANCING & ALL OUR FAVOURITE PEOPLE', 1170, '15px "DM Sans", sans-serif', '#aaa28f');
+  const slug = guestName.toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'guest';
+  canvas.toBlob((blob) => {
+    if (!blob) return;
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.href = url;
+    link.download = `wedding-invitation-for-${slug}.png`;
+    link.click();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }, 'image/png');
+}
+
+recipientForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const guestName = recipientInput.value.trim();
+  if (!guestName) return;
+  cardRecipient.textContent = `Dear ${guestName},`;
+  cardRecipient.hidden = false;
+  recipientDialog.close();
+  downloadInvitationCard(guestName);
+});
+
 // Countdown to November 21, 2026 at 4:30 PM Pacific time.
 const weddingTime = new Date('2026-11-21T16:30:00-08:00').getTime();
 const countdownFields = {

@@ -83,3 +83,22 @@ h1 em{color:var(--ruby-soft)}
   .section-nav a{font-size:8px}
   .header-link{font-size:7px}
 }
+
+.card-recipient{margin:0 0 12px;text-align:center;color:var(--ruby);font:italic 14px var(--serif)}
+.card-download{position:absolute;z-index:4;left:50%;bottom:24px;display:flex;align-items:center;justify-content:center;gap:9px;width:max-content;max-width:calc(100% - 70px);padding:11px 15px;border:1px solid #d9c9aa;border-radius:999px;background:#fbf9f3ed;color:#526454;font:500 9px var(--sans);letter-spacing:.1em;text-transform:uppercase;cursor:pointer;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s,background .2s,border-color .2s}
+.card-download{transform:translateX(-50%)}
+.invitation-card:hover .card-download,.invitation-card:focus-within .card-download{opacity:1;visibility:visible}
+.card-download:hover,.card-download:focus-visible{background:#fff;border-color:var(--ruby);outline:2px solid #842f3e30;outline-offset:2px}
+.card-download span{font-size:15px;color:var(--ruby)}
+@media(hover:none){.card-download{opacity:1;visibility:visible}}
+.recipient-dialog{position:fixed;width:min(92vw,430px);max-width:none;padding:38px 32px 32px;border:1px solid var(--line);background:var(--card);color:var(--ink);box-shadow:0 24px 75px #0003}
+.recipient-dialog::backdrop{background:#17231dcc;backdrop-filter:blur(5px)}
+.recipient-dialog form{display:flex;flex-direction:column;align-items:stretch;gap:14px}
+.recipient-dialog .eyebrow{justify-content:center;margin:0 0 3px}
+.recipient-dialog h2{margin:0 0 5px;text-align:center;font:400 30px/1.15 var(--serif);color:#344a3b}
+.recipient-dialog label{font-size:12px;color:var(--muted)}
+.recipient-dialog input{width:100%;padding:13px 14px;border:1px solid #d9d3c7;background:#fffdf8;color:var(--ink);font:15px var(--sans);outline:none}
+.recipient-dialog input:focus{border-color:var(--ruby);box-shadow:0 0 0 3px #842f3e18}
+.recipient-dialog .rsvp-button{align-self:center;margin-top:5px}
+.recipient-dialog-close{position:absolute;top:9px;right:12px;width:34px;height:34px;border:0;background:transparent;color:#647064;font-size:25px;cursor:pointer}
+@media(max-width:520px){.card-download{bottom:22px;font-size:8px;padding:10px 12px}.recipient-dialog{padding:36px 22px 25px}}

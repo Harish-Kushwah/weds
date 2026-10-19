@@ -58,6 +58,7 @@
       <article class="invitation-card reveal" id="invitation-card">
         <span class="card-corner corner-tl"></span><span class="card-corner corner-tr"></span><span class="card-corner corner-bl"></span><span class="card-corner corner-br"></span>
         <p class="card-kicker">Together with our families</p>
+        <p class="card-recipient" id="card-recipient" hidden></p>
         <div class="card-flower" aria-hidden="true">✳</div>
         <p class="card-intro">request the pleasure of your company</p>
         <h3>Harish <span>&amp;</span> Kavitha</h3>
@@ -67,6 +68,7 @@
         <p class="card-time">at half past four</p>
         <p class="card-venue"><strong>The Glasshouse Gardens</strong><br>Sonoma Valley · California</p>
         <p class="card-foot">Dinner, dancing &amp; all our favourite people</p>
+        <button class="card-download" id="download-card" type="button"><span aria-hidden="true">↓</span> Download your invitation</button>
       </article>
       <p class="tilt-hint">Move your cursor over the invitation</p>
     </section>
@@ -97,6 +99,17 @@
     </section>
   </main>
   <footer class="site-footer"><span>Made with love</span><span class="footer-heart">♡</span><span>21 · 11 · 2026</span></footer>
+
+  <dialog class="recipient-dialog" id="recipient-dialog" aria-labelledby="recipient-dialog-title">
+    <button class="recipient-dialog-close" id="recipient-dialog-close" type="button" aria-label="Close">×</button>
+    <form id="recipient-form">
+      <p class="eyebrow">A little something for you</p>
+      <h2 id="recipient-dialog-title">Personalize your invitation</h2>
+      <label for="recipient-name">What name should appear on the card?</label>
+      <input id="recipient-name" name="name" type="text" maxlength="40" autocomplete="name" placeholder="Your name" required />
+      <button class="rsvp-button" type="submit">Personalize &amp; download <span aria-hidden="true">↗</span></button>
+    </form>
+  </dialog>
 
   <dialog class="photo-lightbox" id="photo-lightbox" aria-label="Photo viewer">
     <button class="lightbox-close" id="lightbox-close" aria-label="Close photo">×</button>
