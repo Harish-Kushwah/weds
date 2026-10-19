@@ -56,3 +56,30 @@ h1 em{color:var(--ruby-soft)}
 @keyframes gallery-rail-scroll{to{transform:translateY(calc(-50% - 9px))}}
 @media(max-width:760px){.gallery-rails{grid-template-columns:repeat(2,minmax(0,1fr));height:68vh;min-height:400px;gap:12px}.gallery-rail-track,.gallery-rail-list{gap:12px}.gallery-rail:nth-child(2) .gallery-rail-track{animation-duration:54s}}
 @media(prefers-reduced-motion:reduce){.gallery-rails{height:auto;min-height:0;overflow:visible;mask-image:none}.gallery-rail{height:auto;overflow:visible}.gallery-rail-track{display:block;animation:none!important;will-change:auto}.gallery-rail-list{gap:14px}.gallery-rail-list-copy{display:none}.gallery-item{transform:none!important}.gallery-item img{height:auto;object-fit:contain}}
+
+.map-button{display:inline-flex;align-items:center;justify-content:center;gap:12px;text-decoration:none}
+
+/* Persistent section links make the invitation easy to navigate from anywhere. */
+.site-header{position:sticky;top:0;z-index:4;background:#f6f3ebed;backdrop-filter:blur(12px);border-bottom:1px solid #ded8cb80}
+.header-start{display:flex;align-items:center;gap:clamp(18px,3vw,48px);min-width:0;flex:1}
+.section-nav{display:flex;align-items:center;gap:clamp(13px,1.8vw,27px);white-space:nowrap}
+.section-nav a{position:relative;color:#6d7a6d;text-decoration:none;font-size:9px;letter-spacing:.12em;transition:color .2s}
+.section-nav a::after{content:'';position:absolute;left:0;right:100%;bottom:-6px;height:1px;background:var(--ruby);transition:right .2s}
+.section-nav a:hover,.section-nav a:focus-visible{color:var(--ruby)}
+.section-nav a:hover::after,.section-nav a:focus-visible::after{right:0}
+.header-link{margin-left:20px;white-space:nowrap}
+@media(max-width:760px){
+  html{scroll-padding-top:112px}
+  .site-header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 14px;height:auto;min-height:0;padding:12px 22px}
+  .header-start{display:contents}
+  .brand{grid-column:1;grid-row:1}
+  .header-link{grid-column:2;grid-row:1;margin-left:0}
+  .section-nav{grid-column:1/-1;grid-row:2;max-width:100%;gap:22px;overflow-x:auto;padding:2px 0 7px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .section-nav::-webkit-scrollbar{display:none}
+}
+@media(max-width:380px){
+  .site-header{padding:10px 16px}
+  .section-nav{gap:17px}
+  .section-nav a{font-size:8px}
+  .header-link{font-size:7px}
+}

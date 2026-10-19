@@ -375,30 +375,6 @@ window.setInterval(updateCountdown, 60000);
 
 window.addEventListener('resize', () => setActivePhoto(activePhoto));
 
-// RSVP is a front-end confirmation template. Connect it to a form or service to collect replies.
-const modal = document.querySelector('#rsvp-modal');
-const openButton = document.querySelector('#open-rsvp');
-const closeButton = document.querySelector('#close-rsvp');
-function setModal(open) {
-  modal.classList.toggle('open', open);
-  modal.setAttribute('aria-hidden', String(!open));
-  document.body.classList.toggle('modal-open', open);
-  if (open) closeButton.focus(); else openButton.focus();
-}
-openButton.addEventListener('click', () => setModal(true));
-closeButton.addEventListener('click', () => setModal(false));
-modal.addEventListener('click', (event) => { if (event.target === modal) setModal(false); });
-document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && modal.classList.contains('open')) setModal(false); });
-document.querySelectorAll('.choices button').forEach((button) => {
-  button.addEventListener('click', () => {
-    document.querySelectorAll('.choices button').forEach((choice) => choice.classList.remove('selected'));
-    button.classList.add('selected');
-    document.querySelector('#response').textContent = button.dataset.answer === 'joyfully'
-      ? 'Lovely! We can’t wait to celebrate with you.'
-      : 'Thank you for letting us know. You’ll be missed.';
-  });
-});
-
 // Play the supplied wedding music after the visitor presses the music button.
 const musicToggle = document.querySelector('#music-toggle');
 const weddingMusic = document.querySelector('#wedding-music');
