@@ -164,6 +164,65 @@ try {
     fragmentShader: `varying float vAlpha;void main(){vec2 p=gl_PointCoord-.5;float d=length(vec2(p.x*1.15,p.y));if(d>.5)discard;gl_FragColor=vec4(.66,.60,.44,vAlpha*(1.-smoothstep(.28,.5,d)));}`
   });
   scene.add(new THREE.Points(geometry, material));
+
+  // Randomly scattered, softly lit 3D hearts and stars.
+  const makeHeartShape = () => {
+    const shape = new THREE.Shape();
+    shape.moveTo(0, -0.62);
+    shape.bezierCurveTo(-0.12, -0.4, -0.78, 0.02, -0.78, 0.43);
+    shape.bezierCurveTo(-0.78, 0.93, -0.14, 0.98, 0, 0.48);
+    shape.bezierCurveTo(0.14, 0.98, 0.78, 0.93, 0.78, 0.43);
+    shape.bezierCurveTo(0.78, 0.02, 0.12, -0.4, 0, -0.62);
+    return shape;
+  };
+  const makeStarShape = () => {
+    const shape = new THREE.Shape();
+    for (let point = 0; point < 10; point += 1) {
+      const angle = Math.PI / 2 + point * Math.PI / 5;
+      const radius = point % 2 === 0 ? 0.62 : 0.27;
+      const x = Math.cos(angle) * radius;
+      const y = Math.sin(angle) * radius;
+      if (point === 0) shape.moveTo(x, y); else shape.lineTo(x, y);
+    }
+    shape.closePath();
+    return shape;
+  };
+  const charmGeometry = (shape, depth) => new THREE.ExtrudeGeometry(shape, {
+    depth, bevelEnabled: true, bevelSegments: 2, steps: 1,
+    bevelSize: 0.045, bevelThickness: 0.045, curveSegments: 12
+  });
+  const heartGeometry = charmGeometry(makeHeartShape(), 0.12);
+  const starGeometry = charmGeometry(makeStarShape(), 0.12);
+  const heartMaterial = new THREE.MeshPhysicalMaterial({ color: 0x9b4050, metalness: 0.12, roughness: 0.38, clearcoat: 0.45, transparent: true, opacity: 0.2 });
+  const starMaterial = new THREE.MeshPhysicalMaterial({ color: 0xc0a064, metalness: 0.2, roughness: 0.34, clearcoat: 0.5, transparent: true, opacity: 0.24 });
+  scene.add(new THREE.AmbientLight(0xffffff, 1.5));
+  const charmLight = new THREE.PointLight(0xffe3c7, 30, 900);
+  charmLight.position.set(-innerWidth * 0.22, innerHeight * 0.3, 12);
+  scene.add(charmLight);
+  const charms = [];
+  const charmCount = innerWidth < 700 ? 4 : 6;
+  const placed = [];
+  for (let i = 0; i < charmCount; i += 1) {
+    const isHeart = Math.random() < 0.52;
+    const mesh = new THREE.Mesh(isHeart ? heartGeometry : starGeometry, isHeart ? heartMaterial : starMaterial);
+    const scale = 7 + Math.random() * 5;
+    mesh.scale.setScalar(scale);
+    let x = 0;
+    let y = 0;
+    let attempts = 0;
+    do {
+      x = (Math.random() - 0.5) * 0.88;
+      y = (Math.random() - 0.5) * 0.82;
+      attempts += 1;
+    } while (placed.some((point) => Math.hypot((x - point.x) * innerWidth, (y - point.y) * innerHeight) < 155) && attempts < 80);
+    placed.push({ x, y });
+    mesh.position.set(x * innerWidth, y * innerHeight, -2 + Math.random() * 2);
+    const rotationY = Math.random() * 0.16 - 0.08;
+    const rotationZ = Math.random() * 0.22 - 0.11;
+    mesh.rotation.set(Math.random() * 0.12 - 0.06, rotationY, rotationZ);
+    scene.add(mesh);
+    charms.push({ mesh, x, y, phase: Math.random() * Math.PI * 2, drift: 3 + Math.random() * 5, rotationY, rotationZ, rotationSpeed: 0.12 + Math.random() * 0.12 });
+  }
   let frameId;
   let lastFrame = 0;
   const draw = (time = 0) => {
@@ -172,6 +231,13 @@ try {
     if (reducedMotion && time - lastFrame < 1200) return;
     lastFrame = time;
     material.uniforms.uTime.value = time * 0.001;
+    charms.forEach(({ mesh, x, y, phase, drift, rotationY, rotationZ, rotationSpeed }) => {
+      const elapsed = reducedMotion ? 0 : time * 0.001;
+      mesh.position.x = x * innerWidth + Math.sin(elapsed * 0.3 + phase) * drift;
+      mesh.position.y = y * innerHeight + Math.cos(elapsed * 0.24 + phase) * drift;
+      mesh.rotation.y = rotationY + Math.sin(elapsed * rotationSpeed + phase) * 0.18;
+      mesh.rotation.z = rotationZ + Math.sin(elapsed * 0.2 + phase) * 0.035;
+    });
     for (let i = 0; i < count; i += 1) {
       positions[i * 3 + 1] -= speeds[i];
       positions[i * 3] += Math.sin(time * 0.0003 + phases[i]) * 0.12;
@@ -186,6 +252,7 @@ try {
   draw();
   window.addEventListener('resize', () => {
     renderer.setSize(innerWidth, innerHeight);
+    charms.forEach(({ mesh, x, y }) => mesh.position.set(x * innerWidth, y * innerHeight, mesh.position.z));
     camera.left = -innerWidth / 2;
     camera.right = innerWidth / 2;
     camera.top = innerHeight / 2;
