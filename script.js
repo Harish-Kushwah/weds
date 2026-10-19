@@ -138,3 +138,33 @@ document.querySelectorAll('.choices button').forEach((button) => {
       : 'Thank you for letting us know. You’ll be missed.';
   });
 });
+
+// Play the supplied wedding music after the visitor presses the music button.
+const musicToggle = document.querySelector('#music-toggle');
+const weddingMusic = document.querySelector('#wedding-music');
+const musicLabel = musicToggle.querySelector('.music-label');
+
+musicToggle.addEventListener('click', async () => {
+  if (weddingMusic.paused) {
+    try {
+      await weddingMusic.play();
+      musicToggle.setAttribute('aria-pressed', 'true');
+      musicToggle.setAttribute('aria-label', 'Pause wedding music');
+      musicLabel.textContent = 'Pause music';
+    } catch (error) {
+      musicLabel.textContent = 'Could not play';
+      musicToggle.setAttribute('aria-label', 'Could not play wedding music');
+    }
+  } else {
+    weddingMusic.pause();
+    musicToggle.setAttribute('aria-pressed', 'false');
+    musicToggle.setAttribute('aria-label', 'Play wedding music');
+    musicLabel.textContent = 'Play music';
+  }
+});
+
+weddingMusic.addEventListener('ended', () => {
+  musicToggle.setAttribute('aria-pressed', 'false');
+  musicToggle.setAttribute('aria-label', 'Play wedding music');
+  musicLabel.textContent = 'Play music';
+});
