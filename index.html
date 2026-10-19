@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f5f1e8" />
+  <title>Amara & Julian — Wedding Invitation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.169.0/build/three.module.js"}}</script>
+  <style>
+    :root{--paper:#fbf9f3;--ink:#26382f;--muted:#737b70;--green:#385648;--gold:#a88650;--line:#e7e1d5}
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:#f4f1e9;color:var(--ink);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+    #petals{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+    .page{position:relative;z-index:1;min-height:100vh;padding:26px clamp(20px,5vw,76px) 34px;display:flex;flex-direction:column}
+    nav{height:42px;display:flex;align-items:center;justify-content:space-between;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#66756a}
+    .brand{display:flex;align-items:center;gap:10px}.brand-mark{font-family:'Playfair Display',serif;font-size:19px;letter-spacing:-.08em;color:var(--green)}
+    .nav-note{display:flex;align-items:center;gap:9px}.live-dot{width:6px;height:6px;border-radius:50%;background:#9baf91;box-shadow:0 0 0 4px #9baf9126}
+    main{flex:1;display:grid;grid-template-columns:minmax(265px,.8fr) minmax(380px,1.1fr);gap:clamp(42px,8vw,140px);align-items:center;max-width:1120px;width:100%;margin:auto}
+    .intro{padding:24px 0}.eyebrow{display:flex;align-items:center;gap:12px;color:var(--gold);text-transform:uppercase;letter-spacing:.24em;font-size:10px;font-weight:600}.eyebrow:before{content:'';width:32px;height:1px;background:var(--gold)}
+    h1{font-family:'Playfair Display',serif;font-weight:400;font-size:clamp(50px,6.2vw,83px);line-height:.98;letter-spacing:-.055em;margin:25px 0 18px;color:#2e4035}h1 em{font-weight:400;color:#8b9d86;display:block;font-size:.83em;margin:5px 0}
+    .intro-copy{font-size:14px;line-height:1.9;color:#73786f;max-width:340px;margin:0 0 36px}.intro-copy b{font-weight:500;color:#3e5146}
+    .date-block{border-top:1px solid #dcd7cb;border-bottom:1px solid #dcd7cb;padding:15px 0;display:flex;align-items:center;gap:18px;max-width:315px}.date-day{font-family:'Playfair Display',serif;font-size:38px;line-height:1;color:#425d4c}.date-details{font-size:10px;line-height:1.8;text-transform:uppercase;letter-spacing:.15em;color:#69736a}.date-details b{font-size:11px;color:#35483b;font-weight:600}
+    .place{margin-top:22px;display:flex;gap:12px;align-items:center;color:#69746a;font-size:11px;line-height:1.7}.pin{color:var(--gold);font-size:17px}
+    .rsvp{border:0;background:#3e5949;color:white;padding:13px 20px;font:500 10px 'DM Sans',sans-serif;text-transform:uppercase;letter-spacing:.17em;margin-top:28px;cursor:pointer;transition:background .2s,transform .2s}.rsvp:hover{background:#2d4437;transform:translateY(-2px)}
+    .card-wrap{perspective:1200px;display:flex;justify-content:center;padding:22px}.card{position:relative;width:min(100%,440px);min-height:565px;background:var(--paper);padding:14px;box-shadow:0 35px 80px #514a3b20,0 4px 12px #514a3b0b;transform-style:preserve-3d;transition:transform .16s ease-out;will-change:transform}
+    .card-inner{border:1px solid #dfd8c9;min-height:537px;height:100%;padding:30px 28px 25px;text-align:center;position:relative;display:flex;flex-direction:column;align-items:center;overflow:hidden}
+    .card-inner:before,.card-inner:after{content:'✳';position:absolute;color:#a8b19b;font-size:16px;opacity:.7}.card-inner:before{top:12px;left:14px}.card-inner:after{bottom:12px;right:14px}
+    .corner{position:absolute;width:42px;height:42px;border-color:#d7c8aa;border-style:solid;opacity:.8}.c1{top:20px;left:20px;border-width:1px 0 0 1px}.c2{top:20px;right:20px;border-width:1px 1px 0 0}.c3{bottom:20px;left:20px;border-width:0 0 1px 1px}.c4{bottom:20px;right:20px;border-width:0 1px 1px 0}
+    .card-overline{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:#87927f;margin:3px 0 21px}.card-art{width:156px;height:108px;margin:1px auto 13px;position:relative}.card-art svg{width:100%;height:100%;overflow:visible}
+    .card-intro{font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:#777b6f;margin:5px 0 10px}.names{font-family:'Playfair Display',serif;font-size:46px;font-weight:400;line-height:1.05;letter-spacing:-.035em;color:#3d5748}.amp{font-style:italic;font-size:31px;color:#ad9367;line-height:1.12}.card-message{font-family:'Playfair Display',serif;font-size:14px;color:#737b70;font-style:italic;margin:18px 0 19px}.divider{display:flex;align-items:center;gap:10px;color:#ad9367;font-size:11px;width:72%;margin:0 auto 18px}.divider:before,.divider:after{content:'';height:1px;background:#ddd4c4;flex:1}
+    .wedding-date{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#546252}.wedding-time{font-family:'Playfair Display',serif;font-size:21px;color:#415649;margin:7px 0 15px}.venue{font-size:10px;letter-spacing:.08em;text-transform:uppercase;line-height:1.9;color:#81877a}.venue b{font-weight:600;color:#4e5c4f}.card-bottom{font-size:8px;color:#aaa28f;letter-spacing:.2em;text-transform:uppercase;margin-top:auto;padding-top:20px}
+    .hint{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#8e9388;text-align:center;margin-top:13px}
+    footer{display:flex;justify-content:space-between;align-items:center;color:#929388;font-size:9px;letter-spacing:.12em;text-transform:uppercase;margin-top:auto;padding-top:20px}.footer-heart{color:#aa9065;font-size:13px}
+    .modal{position:fixed;inset:0;background:#1d2a2399;z-index:5;display:grid;place-items:center;padding:20px;opacity:0;visibility:hidden;transition:.25s}.modal.open{opacity:1;visibility:visible}.modal-box{background:var(--paper);padding:34px;width:min(100%,390px);position:relative;text-align:center;box-shadow:0 25px 65px #0003}.modal-box h2{font:400 34px 'Playfair Display',serif;margin:0 0 8px}.modal-box p{font-size:12px;color:#777;margin:0 0 23px}.close{position:absolute;top:12px;right:14px;border:0;background:none;font-size:22px;color:#647064;cursor:pointer}.choices{display:flex;gap:10px}.choices button{flex:1;padding:12px 8px;background:transparent;border:1px solid #d9d3c7;color:#47574a;text-transform:uppercase;letter-spacing:.09em;font:500 9px 'DM Sans',sans-serif;cursor:pointer}.choices button:hover,.choices button.selected{background:#405c4b;color:white;border-color:#405c4b}.response{min-height:18px;margin-top:16px;color:#55705b;font-size:11px}
+    @media(max-width:760px){.page{padding:15px 20px 22px}nav{height:35px}.nav-note{font-size:9px}main{grid-template-columns:1fr;gap:12px;max-width:500px;padding-top:24px}.intro{padding:10px 2px 0;text-align:center}.eyebrow{justify-content:center}h1{font-size:55px;margin:18px 0 12px}.intro-copy{margin:0 auto 20px;font-size:12px}.date-block{margin:auto;justify-content:center;padding:11px 0}.date-day{font-size:32px}.place{justify-content:center;margin-top:13px}.rsvp{margin-top:17px}.card-wrap{padding:20px 0 0}.card{min-height:510px;width:min(100%,400px)}.card-inner{min-height:482px;padding:24px 20px 20px}.card-art{height:82px;margin-bottom:9px}.card-art svg{height:100%}.card-overline{margin-bottom:13px}.names{font-size:40px}.card-message{margin:12px 0 14px}.card-bottom{padding-top:13px}.hint{margin-top:9px}footer{font-size:8px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <canvas id="petals" aria-hidden="true"></canvas>
+  <div class="page">
+    <nav><div class="brand"><span class="brand-mark">a+j</span><span>our wedding</span></div><div class="nav-note"><span class="live-dot"></span> A little something lovely</div></nav>
+    <main>
+      <section class="intro">
+        <div class="eyebrow">A day to remember</div>
+        <h1>Amara <em>&amp;</em> Julian</h1>
+        <p class="intro-copy">Two hearts, one beautiful beginning. We'd love for you to be there as we say <b>“I do.”</b></p>
+        <div class="date-block"><div class="date-day">24</div><div class="date-details"><b>Saturday · October</b><br>Two thousand twenty six</div></div>
+        <div class="place"><span class="pin">⌖</span><span><b>The Glasshouse Gardens</b><br>Sonoma Valley, California</span></div>
+        <button class="rsvp" id="open-rsvp">Kindly respond&nbsp; ↗</button>
+      </section>
+      <section class="card-wrap" aria-label="Wedding invitation preview">
+        <article class="card" id="invitation-card">
+          <div class="card-inner">
+            <i class="corner c1"></i><i class="corner c2"></i><i class="corner c3"></i><i class="corner c4"></i>
+            <div class="card-overline">With joyful hearts</div>
+            <div class="card-art" aria-hidden="true"><svg viewBox="0 0 180 118" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M90 111C88 83 80 63 63 39M91 108C96 79 109 58 127 37M86 92C70 78 57 72 40 70M97 87C117 74 133 70 149 72" stroke="#81937c" stroke-width="1.2" stroke-linecap="round"/><path d="M63 39C49 40 42 30 46 19C58 19 67 26 63 39ZM127 37C140 34 144 23 138 14C127 16 121 26 127 37ZM40 70C30 61 20 64 17 73C25 81 36 79 40 70ZM149 72C160 65 169 70 168 79C158 84 150 81 149 72Z" fill="#dce4d5" stroke="#94a48e" stroke-width="1"/><path d="M83 48C75 43 74 34 80 29C87 32 89 41 83 48ZM98 63C91 55 94 47 101 44C107 49 105 58 98 63Z" fill="#e8dcca" stroke="#b6a686" stroke-width="1"/><circle cx="90" cy="83" r="7" fill="#e7d1b9" stroke="#b99b70" stroke-width="1"/><circle cx="90" cy="83" r="2" fill="#a98658"/></svg></div>
+            <div class="card-intro">Together with their families</div>
+            <div class="names">Amara</div><div class="amp">&amp;</div><div class="names">Julian</div>
+            <div class="card-message">invite you to celebrate their wedding</div>
+            <div class="divider">✦</div>
+            <div class="wedding-date">Saturday, the twenty-fourth of October</div>
+            <div class="wedding-time">at half past four</div>
+            <div class="venue"><b>The Glasshouse Gardens</b><br>Sonoma Valley · California</div>
+            <div class="card-bottom">Dinner &amp; dancing to follow</div>
+          </div>
+        </article>
+        <div class="hint">Move your cursor over the invitation</div>
+      </section>
+    </main>
+    <footer><span>Made with love</span><span class="footer-heart">♡</span><span>October 24, 2026</span></footer>
+  </div>
+  <div class="modal" id="rsvp-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-box"><button class="close" id="close-rsvp" aria-label="Close">×</button><h2 id="modal-title">Will you join us?</h2><p>We'd be so happy to celebrate with you.</p><div class="choices"><button data-answer="joyfully">Joyfully accepts</button><button data-answer="regretfully">Regretfully declines</button></div><div class="response" id="response" aria-live="polite"></div></div>
+  </div>
+  <script type="module">
+    import * as THREE from 'three';
+    const canvas = document.querySelector('#petals');
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setPixelRatio(Math.min(devicePixelRatio, 1.6));
+      renderer.setSize(innerWidth, innerHeight);
+      const scene = new THREE.Scene();
+      const camera = new THREE.OrthographicCamera(-innerWidth/2, innerWidth/2, innerHeight/2, -innerHeight/2, .1, 100);
+      camera.position.z = 20;
+      const count = innerWidth < 700 ? 36 : 66;
+      const geometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(count * 3), speeds = new Float32Array(count), phases = new Float32Array(count), sizes = new Float32Array(count);
+      for (let i=0;i<count;i++){positions[i*3]=(Math.random()-.5)*innerWidth;positions[i*3+1]=(Math.random()-.5)*innerHeight;positions[i*3+2]=0;speeds[i]=.22+Math.random()*.55;phases[i]=Math.random()*Math.PI*2;sizes[i]=2+Math.random()*3}
+      geometry.setAttribute('position',new THREE.BufferAttribute(positions,3));geometry.setAttribute('aPhase',new THREE.BufferAttribute(phases,1));geometry.setAttribute('aSize',new THREE.BufferAttribute(sizes,1));
+      const material = new THREE.ShaderMaterial({transparent:true,depthWrite:false,vertexShader:`attribute float aPhase; attribute float aSize; uniform float uTime; varying float vAlpha; void main(){vec3 p=position;p.x+=sin(uTime*.45+aPhase)*9.;p.y+=cos(uTime*.35+aPhase)*4.;vec4 mv=modelViewMatrix*vec4(p,1.);gl_Position=projectionMatrix*mv;gl_PointSize=aSize;vAlpha=.28+.18*sin(uTime+aPhase);}`,fragmentShader:`varying float vAlpha; void main(){vec2 p=gl_PointCoord-.5;float d=length(vec2(p.x*1.15,p.y));if(d>.5)discard;gl_FragColor=vec4(.66,.60,.44,vAlpha*(1.-smoothstep(.28,.5,d)));}`,uniforms:{uTime:{value:0}}});
+      const petals = new THREE.Points(geometry,material);scene.add(petals);let frame=0;let last=0;
+      function render(now=0){if(document.hidden)return;frame=requestAnimationFrame(render);if(reducedMotion&&now-last<1000)return;last=now;material.uniforms.uTime.value=now*.001;for(let i=0;i<count;i++){positions[i*3+1]-=speeds[i];positions[i*3]+=.12*Math.sin(now*.0004+phases[i]);if(positions[i*3+1]<-innerHeight/2-8){positions[i*3+1]=innerHeight/2+8;positions[i*3]=(Math.random()-.5)*innerWidth}}geometry.attributes.position.needsUpdate=true;renderer.render(scene,camera)}render();
+      addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight);camera.left=-innerWidth/2;camera.right=innerWidth/2;camera.top=innerHeight/2;camera.bottom=-innerHeight/2;camera.updateProjectionMatrix()});
+      document.addEventListener('visibilitychange',()=>{cancelAnimationFrame(frame);if(!document.hidden)render()});
+    } catch (e) { canvas.style.display='none'; }
+    const card=document.querySelector('#invitation-card'), wrap=document.querySelector('.card-wrap');
+    if(!matchMedia('(prefers-reduced-motion: reduce)').matches && matchMedia('(pointer:fine)').matches){wrap.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform=`rotateY(${x*5}deg) rotateX(${-y*5}deg) translateY(-3px)`});wrap.addEventListener('pointerleave',()=>card.style.transform='rotateY(0) rotateX(0) translateY(0)')}
+    const modal=document.querySelector('#rsvp-modal');document.querySelector('#open-rsvp').addEventListener('click',()=>modal.classList.add('open'));document.querySelector('#close-rsvp').addEventListener('click',()=>modal.classList.remove('open'));modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('open')});document.addEventListener('keydown',e=>{if(e.key==='Escape')modal.classList.remove('open')});document.querySelectorAll('.choices button').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('.choices button').forEach(b=>b.classList.remove('selected'));button.classList.add('selected');document.querySelector('#response').textContent=button.dataset.answer==='joyfully'?'Lovely! We can’t wait to celebrate with you.':'Thank you for letting us know. You’ll be missed.'}));
+  </script>
+</body>
+</html>
