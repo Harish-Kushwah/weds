@@ -40,3 +40,19 @@ h1 em{color:var(--ruby-soft)}
 
 .section-note{max-width:330px;margin:27px 0 0;padding-left:17px;border-left:1px solid #c7aeb0;color:#74796f;font:italic 16px/1.8 var(--serif)}
 @media(max-width:760px){.section-note{margin:20px auto 0;padding:15px 0 0;border-left:0;border-top:1px solid #c7aeb0;text-align:center;font-size:15px}}
+
+/* Natural image proportions inside slow, looping vertical gallery rails. */
+.gallery-rails{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;max-width:1100px;height:min(76vh,860px);min-height:440px;margin:0 auto;overflow:hidden;mask-image:linear-gradient(transparent,#000 9%,#000 91%,transparent)}
+.gallery-rail{min-width:0;height:100%;overflow:hidden}
+.gallery-rail-track{display:flex;flex-direction:column;gap:18px;will-change:transform;animation:gallery-rail-scroll 48s linear infinite}
+.gallery-rail:nth-child(2) .gallery-rail-track{animation-duration:57s;animation-direction:reverse}
+.gallery-rail:nth-child(3) .gallery-rail-track{animation-duration:52s}
+.gallery-rail:nth-child(4) .gallery-rail-track{animation-duration:61s;animation-direction:reverse}
+.gallery-rail-list{display:flex;flex-direction:column;align-items:stretch;gap:18px;flex:0 0 auto}
+.gallery-rail-list-copy{pointer-events:auto}
+.gallery-rails:hover .gallery-rail-track,.gallery-rails:focus-within .gallery-rail-track{animation-play-state:paused}
+.gallery-item{width:100%;height:auto;aspect-ratio:auto;flex:0 0 auto;line-height:0}
+.gallery-item img{width:100%;height:auto;aspect-ratio:auto;object-fit:contain}
+@keyframes gallery-rail-scroll{to{transform:translateY(calc(-50% - 9px))}}
+@media(max-width:760px){.gallery-rails{grid-template-columns:repeat(2,minmax(0,1fr));height:68vh;min-height:400px;gap:12px}.gallery-rail-track,.gallery-rail-list{gap:12px}.gallery-rail:nth-child(2) .gallery-rail-track{animation-duration:54s}}
+@media(prefers-reduced-motion:reduce){.gallery-rails{height:auto;min-height:0;overflow:visible;mask-image:none}.gallery-rail{height:auto;overflow:visible}.gallery-rail-track{display:block;animation:none!important;will-change:auto}.gallery-rail-list{gap:14px}.gallery-rail-list-copy{display:none}.gallery-item{transform:none!important}.gallery-item img{height:auto;object-fit:contain}}

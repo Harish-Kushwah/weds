@@ -14,6 +14,20 @@ function photoUrl(filename) {
   return `images/${encodeURI(filename)}`;
 }
 
+const railCount = window.innerWidth < 700 ? 2 : 4;
+const railLists = Array.from({ length: railCount }, () => {
+  const rail = document.createElement('div');
+  rail.className = 'gallery-rail';
+  const track = document.createElement('div');
+  track.className = 'gallery-rail-track';
+  const list = document.createElement('div');
+  list.className = 'gallery-rail-list';
+  track.append(list);
+  rail.append(track);
+  galleryGrid.append(rail);
+  return { rail, track, list };
+});
+
 function setActivePhoto(index) {
   activePhoto = (index + weddingPhotos.length) % weddingPhotos.length;
   const compactLayout = window.matchMedia('(max-width: 520px)').matches;
@@ -59,6 +73,7 @@ weddingPhotos.forEach((filename, index) => {
   const galleryButton = document.createElement('button');
   galleryButton.className = 'gallery-item reveal';
   galleryButton.type = 'button';
+  galleryButton.dataset.photoIndex = String(index);
   galleryButton.setAttribute('aria-label', `View wedding photo ${index + 1}`);
   const galleryImage = document.createElement('img');
   galleryImage.src = imageUrl;
@@ -68,7 +83,18 @@ weddingPhotos.forEach((filename, index) => {
   const viewHint = document.createElement('span');
   viewHint.textContent = 'View photo ↗';
   galleryButton.append(galleryImage, viewHint);
-  galleryGrid.append(galleryButton);
+  railLists[index % railCount].list.append(galleryButton);
+});
+
+railLists.forEach(({ track, list }) => {
+  const duplicate = list.cloneNode(true);
+  duplicate.classList.add('gallery-rail-list-copy');
+  duplicate.setAttribute('aria-hidden', 'true');
+  duplicate.querySelectorAll('button').forEach((button) => {
+    button.tabIndex = -1;
+    button.classList.remove('reveal', 'is-visible');
+  });
+  track.append(duplicate);
 });
 
 setActivePhoto(0);
@@ -99,6 +125,38 @@ orbit.addEventListener('pointerup', (event) => {
 });
 orbit.addEventListener('pointercancel', () => { pointerStartX = null; });
 
+// Let the 3D photo stack lean gently toward the pointer, then settle back.
+if (!reducedMotion && matchMedia('(pointer: fine)').matches) {
+  let targetTiltX = 0;
+  let targetTiltY = 0;
+  let currentTiltX = 0;
+  let currentTiltY = 0;
+  let tiltFrame = null;
+  const easeOrbitTilt = () => {
+    currentTiltX += (targetTiltX - currentTiltX) * 0.08;
+    currentTiltY += (targetTiltY - currentTiltY) * 0.08;
+    orbitTrack.style.transform = `rotateX(${currentTiltX}deg) rotateY(${currentTiltY}deg)`;
+    if (Math.abs(targetTiltX - currentTiltX) > 0.01 || Math.abs(targetTiltY - currentTiltY) > 0.01) {
+      tiltFrame = requestAnimationFrame(easeOrbitTilt);
+    } else {
+      currentTiltX = targetTiltX;
+      currentTiltY = targetTiltY;
+      tiltFrame = null;
+    }
+  };
+  orbit.addEventListener('pointermove', (event) => {
+    const bounds = orbit.getBoundingClientRect();
+    targetTiltY = ((event.clientX - bounds.left) / bounds.width - 0.5) * 5;
+    targetTiltX = (0.5 - (event.clientY - bounds.top) / bounds.height) * 3;
+    if (tiltFrame === null) tiltFrame = requestAnimationFrame(easeOrbitTilt);
+  });
+  orbit.addEventListener('pointerleave', () => {
+    targetTiltX = 0;
+    targetTiltY = 0;
+    if (tiltFrame === null) tiltFrame = requestAnimationFrame(easeOrbitTilt);
+  });
+}
+
 const photoLightbox = document.querySelector('#photo-lightbox');
 const lightboxImage = document.querySelector('#lightbox-image');
 const lightboxCaption = document.querySelector('#lightbox-caption');
@@ -108,7 +166,7 @@ galleryGrid.addEventListener('click', (event) => {
   const image = button.querySelector('img');
   lightboxImage.src = image.src;
   lightboxImage.alt = image.alt;
-  lightboxCaption.textContent = `Harish & Kavitha · ${String([...galleryGrid.children].indexOf(button) + 1).padStart(2, '0')}`;
+  lightboxCaption.textContent = `Harish & Kavitha · ${String(Number(button.dataset.photoIndex) + 1).padStart(2, '0')}`;
   photoLightbox.showModal();
 });
 document.querySelector('#lightbox-close').addEventListener('click', () => photoLightbox.close());
@@ -200,6 +258,22 @@ try {
   charmLight.position.set(-innerWidth * 0.22, innerHeight * 0.3, 12);
   scene.add(charmLight);
   const charms = [];
+  const charmGroup = new THREE.Group();
+  scene.add(charmGroup);
+  const pointerTilt = { x: 0, y: 0 };
+  let scrollTilt = 0;
+  if (!reducedMotion && matchMedia('(pointer: fine)').matches) {
+    window.addEventListener('pointermove', (event) => {
+      pointerTilt.x = (event.clientX / innerWidth - 0.5) * 0.12;
+      pointerTilt.y = (event.clientY / innerHeight - 0.5) * 0.08;
+    }, { passive: true });
+  }
+  if (!reducedMotion) {
+    window.addEventListener('scroll', () => {
+      const scrollableHeight = document.documentElement.scrollHeight - innerHeight;
+      scrollTilt = scrollableHeight > 0 ? (window.scrollY / scrollableHeight - 0.5) * 0.1 : 0;
+    }, { passive: true });
+  }
   const charmCount = innerWidth < 700 ? 4 : 6;
   const placed = [];
   for (let i = 0; i < charmCount; i += 1) {
@@ -220,7 +294,7 @@ try {
     const rotationY = Math.random() * 0.16 - 0.08;
     const rotationZ = Math.random() * 0.22 - 0.11;
     mesh.rotation.set(Math.random() * 0.12 - 0.06, rotationY, rotationZ);
-    scene.add(mesh);
+    charmGroup.add(mesh);
     charms.push({ mesh, x, y, phase: Math.random() * Math.PI * 2, drift: 3 + Math.random() * 5, rotationY, rotationZ, rotationSpeed: 0.12 + Math.random() * 0.12 });
   }
   let frameId;
@@ -231,6 +305,10 @@ try {
     if (reducedMotion && time - lastFrame < 1200) return;
     lastFrame = time;
     material.uniforms.uTime.value = time * 0.001;
+    const pointerX = reducedMotion ? 0 : pointerTilt.x;
+    const pointerY = reducedMotion ? 0 : pointerTilt.y;
+    charmGroup.rotation.y += (pointerX - charmGroup.rotation.y) * 0.045;
+    charmGroup.rotation.x += (pointerY + scrollTilt - charmGroup.rotation.x) * 0.045;
     charms.forEach(({ mesh, x, y, phase, drift, rotationY, rotationZ, rotationSpeed }) => {
       const elapsed = reducedMotion ? 0 : time * 0.001;
       mesh.position.x = x * innerWidth + Math.sin(elapsed * 0.3 + phase) * drift;
