@@ -1,6 +1,119 @@
 import * as THREE from 'three';
-
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const TOTAL_PHOTOS = 16;
+const weddingPhotos = Array.from({ length: TOTAL_PHOTOS }, (_, index) => `${index + 1}.jpeg`);
+
+const orbit = document.querySelector('#photo-orbit');
+const orbitTrack = document.querySelector('#photo-orbit-track');
+const galleryGrid = document.querySelector('#gallery-grid');
+const photoCount = document.querySelector('#photo-count');
+let activePhoto = 0;
+
+function photoUrl(filename) {
+  return `images/${encodeURI(filename)}`;
+}
+
+function setActivePhoto(index) {
+  activePhoto = (index + weddingPhotos.length) % weddingPhotos.length;
+  const compactLayout = window.matchMedia('(max-width: 520px)').matches;
+  [...orbitTrack.children].forEach((photo, photoIndex) => {
+    let distance = photoIndex - activePhoto;
+    if (distance > weddingPhotos.length / 2) distance -= weddingPhotos.length;
+    if (distance < -weddingPhotos.length / 2) distance += weddingPhotos.length;
+    const magnitude = Math.abs(distance);
+    if (magnitude > (compactLayout ? 1 : 2)) {
+      photo.style.opacity = '0';
+      photo.style.visibility = 'hidden';
+      photo.style.pointerEvents = 'none';
+      return;
+    }
+    const side = Math.sign(distance);
+    const stageWidth = orbit.clientWidth;
+    const horizontalOffset = distance * stageWidth * (compactLayout ? 0.32 : 0.34);
+    const scale = magnitude === 0 ? 1 : magnitude === 1 ? (compactLayout ? 0.69 : 0.78) : 0.57;
+    const depth = magnitude === 0 ? 35 : magnitude === 1 ? -20 : -125;
+    const tilt = magnitude === 0 ? 0 : side * (magnitude === 1 ? -43 : -57);
+    photo.style.transform = `translateX(calc(-50% + ${horizontalOffset}px)) translateY(-50%) translateZ(${depth}px) rotateY(${tilt}deg) scale(${scale})`;
+    photo.style.opacity = magnitude === 0 ? '1' : magnitude === 1 ? '0.88' : '0.52';
+    photo.style.visibility = 'visible';
+    photo.style.pointerEvents = magnitude === 0 ? 'auto' : 'none';
+    photo.style.zIndex = String(10 - magnitude);
+  });
+  photoCount.textContent = `${String(activePhoto + 1).padStart(2, '0')} / ${String(weddingPhotos.length).padStart(2, '0')}`;
+}
+
+weddingPhotos.forEach((filename, index) => {
+  const imageUrl = photoUrl(filename);
+  const orbitPhoto = document.createElement('div');
+  orbitPhoto.className = 'orbit-photo';
+  orbitPhoto.dataset.index = String(index);
+  const orbitImage = document.createElement('img');
+  orbitImage.src = imageUrl;
+  orbitImage.alt = `Harish and Kavitha, photo ${index + 1}`;
+  orbitImage.loading = index < 4 ? 'eager' : 'lazy';
+  orbitImage.decoding = 'async';
+  orbitPhoto.append(orbitImage);
+  orbitTrack.append(orbitPhoto);
+
+  const galleryButton = document.createElement('button');
+  galleryButton.className = 'gallery-item reveal';
+  galleryButton.type = 'button';
+  galleryButton.setAttribute('aria-label', `View wedding photo ${index + 1}`);
+  const galleryImage = document.createElement('img');
+  galleryImage.src = imageUrl;
+  galleryImage.alt = `Wedding memory ${index + 1}`;
+  galleryImage.loading = 'lazy';
+  galleryImage.decoding = 'async';
+  const viewHint = document.createElement('span');
+  viewHint.textContent = 'View photo ↗';
+  galleryButton.append(galleryImage, viewHint);
+  galleryGrid.append(galleryButton);
+});
+
+setActivePhoto(0);
+document.querySelector('#photo-prev').addEventListener('click', () => setActivePhoto(activePhoto - 1));
+document.querySelector('#photo-next').addEventListener('click', () => setActivePhoto(activePhoto + 1));
+
+let autoRotate;
+function startAutoRotate() {
+  if (reducedMotion || autoRotate) return;
+  autoRotate = window.setInterval(() => setActivePhoto(activePhoto + 1), 3200);
+}
+function stopAutoRotate() {
+  window.clearInterval(autoRotate);
+  autoRotate = undefined;
+}
+startAutoRotate();
+orbit.addEventListener('pointerenter', stopAutoRotate);
+orbit.addEventListener('pointerleave', startAutoRotate);
+orbit.addEventListener('focusin', stopAutoRotate);
+orbit.addEventListener('focusout', startAutoRotate);
+let pointerStartX = null;
+orbit.addEventListener('pointerdown', (event) => { pointerStartX = event.clientX; });
+orbit.addEventListener('pointerup', (event) => {
+  if (pointerStartX === null) return;
+  const difference = event.clientX - pointerStartX;
+  if (Math.abs(difference) > 35) setActivePhoto(activePhoto + (difference < 0 ? 1 : -1));
+  pointerStartX = null;
+});
+orbit.addEventListener('pointercancel', () => { pointerStartX = null; });
+
+const photoLightbox = document.querySelector('#photo-lightbox');
+const lightboxImage = document.querySelector('#lightbox-image');
+const lightboxCaption = document.querySelector('#lightbox-caption');
+galleryGrid.addEventListener('click', (event) => {
+  const button = event.target.closest('.gallery-item');
+  if (!button) return;
+  const image = button.querySelector('img');
+  lightboxImage.src = image.src;
+  lightboxImage.alt = image.alt;
+  lightboxCaption.textContent = `Harish & Kavitha · ${String([...galleryGrid.children].indexOf(button) + 1).padStart(2, '0')}`;
+  photoLightbox.showModal();
+});
+document.querySelector('#lightbox-close').addEventListener('click', () => photoLightbox.close());
+photoLightbox.addEventListener('click', (event) => { if (event.target === photoLightbox) photoLightbox.close(); });
+
 const canvas = document.querySelector('#petals');
 
 // Reveal each section as it enters the viewport.
@@ -114,6 +227,8 @@ function updateCountdown() {
 }
 updateCountdown();
 window.setInterval(updateCountdown, 60000);
+
+window.addEventListener('resize', () => setActivePhoto(activePhoto));
 
 // RSVP is a front-end confirmation template. Connect it to a form or service to collect replies.
 const modal = document.querySelector('#rsvp-modal');

@@ -33,18 +33,13 @@
         <p class="hero-description">A beautiful beginning, made even more special with you by our side. Join us as we celebrate a day full of love, laughter, and happily ever after.</p>
         <a class="text-link" href="#invitation">Read our invitation <span aria-hidden="true">↓</span></a>
       </div>
-      <div class="hero-art reveal reveal-delay" aria-label="Illustration of a floral wedding arch">
-        <div class="sun-disc"></div>
-        <svg class="arch-art" viewBox="0 0 500 570" role="img" aria-label="A hand-drawn garden arch with flowers">
-          <path class="arch-shadow" d="M80 535V282C80 112 161 48 250 48s170 64 170 234v253" />
-          <path class="arch-line" d="M95 535V284C95 125 169 67 250 67s155 58 155 217v251" />
-          <path class="arch-inner" d="M125 535V286c0-140 54-185 125-185s125 45 125 185v249" />
-          <path class="stem" d="M72 490c30-45 44-75 61-123 13-38 23-78 51-114m-77 180c-33-13-50-35-61-65m76 18c30-11 49-28 68-58m-45-75c-31-2-53-15-70-41m86 9c29-10 42-27 55-52m194 321c-30-45-44-75-61-123-13-38-23-78-51-114m77 180c33-13 50-35 61-65m-76 18c-30-11-49-28-68-58m45-75c31-2 53-15 70-41m-86 9c-29-10-42-27-55-52" />
-          <g class="leaves"><path d="M132 354c-40 4-51-18-43-42 26 0 45 12 43 42Zm-37 67c-34-16-34-39-18-54 22 9 33 27 18 54Zm89-137c-8-34 9-49 32-44 6 24-3 44-32 44Zm-116 38c-30-7-38-26-26-44 21 3 34 17 26 44Zm266 32c40 4 51-18 43-42-26 0-45 12-43 42Zm37 67c34-16 34-39 18-54-22 9-33 27-18 54Zm-89-137c8-34-9-49-32-44-6 24 3 44 32 44Zm116 38c30-7 38-26 26-44-21 3-34 17-26 44Z" /></g>
-          <g class="flowers"><circle cx="183" cy="253" r="7"/><circle cx="179" cy="239" r="6"/><circle cx="193" cy="241" r="6"/><circle cx="190" cy="257" r="6"/><circle cx="171" cy="252" r="6"/><circle cx="317" cy="253" r="7"/><circle cx="321" cy="239" r="6"/><circle cx="307" cy="241" r="6"/><circle cx="310" cy="257" r="6"/><circle cx="329" cy="252" r="6"/></g>
-          <path class="ground-line" d="M44 535h412" />
-        </svg>
-        <span class="art-caption">A day to remember · 21.11.26</span>
+      <div class="hero-art reveal reveal-delay">
+        <div class="photo-orbit" id="photo-orbit" aria-label="Wedding photo carousel">
+          <div class="photo-orbit-track" id="photo-orbit-track" aria-live="polite"></div>
+          <div class="orbit-glow" aria-hidden="true"></div>
+        </div>
+        <div class="carousel-controls"><button id="photo-prev" aria-label="Previous photo">←</button><span id="photo-count" aria-live="polite">01 / 17</span><button id="photo-next" aria-label="Next photo">→</button></div>
+        <span class="art-caption">A few of our favourite moments</span>
       </div>
       <a class="scroll-cue" href="#invitation"><span></span> Scroll to explore</a>
     </section>
@@ -79,6 +74,11 @@
       </div>
     </section>
 
+    <section class="gallery-section section-pad" id="gallery">
+      <div class="gallery-heading reveal"><p class="eyebrow">Little moments, big memories</p><h2>Our <em>gallery</em></h2><p>A few moments we'd love to share with you.</p></div>
+      <div class="gallery-grid" id="gallery-grid" aria-label="Wedding photo gallery"></div>
+    </section>
+
     <section class="closing-section reveal">
       <span class="closing-flower" aria-hidden="true">✳</span>
       <p class="eyebrow">We hope you can make it</p>
@@ -92,5 +92,10 @@
   <div class="modal" id="rsvp-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
     <div class="modal-box"><button class="close" id="close-rsvp" aria-label="Close RSVP">×</button><p class="eyebrow">Harish &amp; Kavitha</p><h2 id="modal-title">Will you join us?</h2><p>We'd be so happy to celebrate with you.</p><div class="choices"><button data-answer="joyfully">Joyfully accepts</button><button data-answer="regretfully">Regretfully declines</button></div><div class="response" id="response" aria-live="polite"></div></div>
   </div>
+  <dialog class="photo-lightbox" id="photo-lightbox" aria-label="Photo viewer">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close photo">×</button>
+    <img id="lightbox-image" alt="" />
+    <p id="lightbox-caption"></p>
+  </dialog>
 </body>
 </html>
