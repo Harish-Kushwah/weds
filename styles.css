@@ -28,6 +28,16 @@
 @media(max-width:520px){.photo-orbit{height:min(350px,96vw);min-height:290px}.orbit-photo{width:min(225px,61vw);height:min(310px,84vw);min-height:220px}}
 @media(prefers-reduced-motion:reduce){.orbit-photo{transition:none}}
 
+.closing-section#location{width:100%;display:grid;grid-template-columns:minmax(250px,.8fr) minmax(0,1.2fr);align-items:center;gap:clamp(28px,6vw,84px);padding:clamp(58px,8vw,100px) clamp(24px,8vw,120px);text-align:left}
+.location-copy{justify-self:center;max-width:420px}
+.location-copy .eyebrow{justify-content:flex-start}
+.location-copy .eyebrow:before{content:'';width:29px;height:1px;background:var(--gold)}
+.location-copy .closing-flower{display:block;margin:0 0 20px}
+.location-copy h2{margin:22px 0 12px}
+.location-copy>p:last-child{font:italic 17px var(--serif);color:#818276;margin:0}
+.location-map{display:block;width:100%;height:clamp(320px,38vw,480px);border:0;border-radius:4px;box-shadow:0 18px 48px #30291d20}
+@media(max-width:760px){.closing-section#location{grid-template-columns:1fr;gap:30px;padding:68px 22px 76px;text-align:center}.location-copy{justify-self:center}.location-copy .eyebrow{justify-content:center}.location-copy .closing-flower{margin-bottom:15px}.location-copy h2{font-size:44px}.location-map{height:min(68vh,420px);min-height:300px}}
+
 /* A soft ruby accent brings a little more romance to the wedding header. */
 :root{--ruby:#e1284d;--ruby-soft:#a65b62}
 .brand-mark{position:relative;display:inline-flex;align-items:center;justify-content:center;min-width:39px;height:43px;padding:4px 6px 6px;border:1px solid #842f3e38;border-radius:50% 50% 4px 4px;color:var(--ruby);font-size:19px;letter-spacing:-.1em}

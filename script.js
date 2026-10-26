@@ -483,7 +483,7 @@ async function downloadInvitationCard(guestName) {
   centerText('✦', 743, '20px Georgia, serif', '#ad8b58');
   centerText('SATURDAY · 21 NOVEMBER 2026', 840, '600 18px "DM Sans", sans-serif', '#536351');
   centerText('at half past four', 915, '32px "Playfair Display", Georgia, serif', '#415649');
-  centerText('-', 1015, '600 19px "DM Sans", sans-serif', '#4e5c4f');
+  centerText('Sarawan ', 1015, '600 19px "DM Sans", sans-serif', '#4e5c4f');
   centerText('UTTAR PRADESH', 1060, '17px "DM Sans", sans-serif', '#81877a');
   centerText('DINNER, DANCING & ALL OUR FAVOURITE PEOPLE', 1170, '15px "DM Sans", sans-serif', '#aaa28f');
   const slug = guestName.toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'guest';
