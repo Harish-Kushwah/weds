@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-const TOTAL_PHOTOS = 16;
+const TOTAL_PHOTOS = 56;
 const weddingPhotos = Array.from({ length: TOTAL_PHOTOS }, (_, index) => `${index + 1}.jpeg`);
 
 const orbit = document.querySelector('#photo-orbit');
@@ -377,7 +377,11 @@ async function downloadInvitationCard(guestName) {
   canvas.width = 1200;
   canvas.height = 1500;
   const context = canvas.getContext('2d');
-  context.fillStyle = '#fbf9f3';
+  const paperGradient = context.createLinearGradient(0, 0, canvas.width, canvas.height);
+  paperGradient.addColorStop(0, '#fcfaf5');
+  paperGradient.addColorStop(0.52, '#fbf9f3');
+  paperGradient.addColorStop(1, '#f7f5ec');
+  context.fillStyle = paperGradient;
   context.fillRect(0, 0, canvas.width, canvas.height);
   context.strokeStyle = '#ded8cb';
   context.lineWidth = 2;
@@ -394,6 +398,53 @@ async function downloadInvitationCard(guestName) {
   };
   corner(78, 78, 1, 1); corner(1122, 78, -1, 1);
   corner(78, 1422, 1, -1); corner(1122, 1422, -1, -1);
+  const drawBotanicalCorner = (x, y, rotation = 0) => {
+    context.save();
+    context.translate(x, y);
+    context.rotate(rotation);
+    context.strokeStyle = '#81917d';
+    context.lineWidth = 2;
+    context.beginPath();
+    context.moveTo(8, 150);
+    context.bezierCurveTo(37, 126, 21, 99, 50, 78);
+    context.bezierCurveTo(81, 49, 91, 28, 113, 9);
+    context.stroke();
+    const leaf = (leafX, leafY, angle) => {
+      context.save();
+      context.translate(leafX, leafY);
+      context.rotate(angle);
+      context.beginPath();
+      context.moveTo(-18, 0);
+      context.quadraticCurveTo(0, -13, 18, 0);
+      context.quadraticCurveTo(0, 13, -18, 0);
+      context.fillStyle = '#dce4d5';
+      context.strokeStyle = '#8d9b84';
+      context.fill(); context.stroke();
+      context.restore();
+    };
+    leaf(19, 128, 0.55); leaf(31, 103, -0.6); leaf(50, 81, 0.6);
+    leaf(73, 57, -0.55); leaf(96, 32, 0.6); leaf(108, 17, -0.5);
+    const bloom = (bloomX, bloomY, size) => {
+      context.save();
+      context.translate(bloomX, bloomY);
+      context.fillStyle = '#bd7880';
+      context.strokeStyle = '#a65b62';
+      context.lineWidth = 1.2;
+      for (let petal = 0; petal < 5; petal += 1) {
+        const angle = petal * Math.PI * 2 / 5;
+        context.beginPath();
+        context.ellipse(Math.cos(angle) * size * 0.68, Math.sin(angle) * size * 0.68, size * 0.55, size * 0.38, angle, 0, Math.PI * 2);
+        context.fill(); context.stroke();
+      }
+      context.beginPath(); context.arc(0, 0, size * 0.28, 0, Math.PI * 2);
+      context.fillStyle = '#d9bd86'; context.fill();
+      context.restore();
+    };
+    bloom(44, 112, 14); bloom(87, 54, 10);
+    context.restore();
+  };
+  drawBotanicalCorner(76, 76);
+  drawBotanicalCorner(1124, 1424, Math.PI);
   const centerText = (text, y, font, color, maxWidth = 1000) => {
     context.textAlign = 'center';
     context.fillStyle = color;

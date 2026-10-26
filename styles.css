@@ -102,3 +102,30 @@ h1 em{color:var(--ruby-soft)}
 .recipient-dialog .rsvp-button{align-self:center;margin-top:5px}
 .recipient-dialog-close{position:absolute;top:9px;right:12px;width:34px;height:34px;border:0;background:transparent;color:#647064;font-size:25px;cursor:pointer}
 @media(max-width:520px){.card-download{bottom:22px;font-size:8px;padding:10px 12px}.recipient-dialog{padding:36px 22px 25px}}
+
+/* Refined keepsake invitation treatment with delicate botanical corners. */
+.invitation-card{width:min(100%,470px);min-height:620px;padding:24px 24px 58px;border:1px solid #e6dccb;background:radial-gradient(ellipse at 7% 8%,#f1e7de88,transparent 34%),radial-gradient(ellipse at 94% 94%,#e7e9dc88,transparent 36%),#fbf9f3;box-shadow:0 34px 80px #514a3b20,0 5px 16px #514a3b0a}
+.invitation-card:before{inset:12px;border-color:#e0d5c2}
+.invitation-card:after{content:'✦';color:#b3a17d;z-index:1}
+.card-botanical{position:absolute;z-index:0;width:108px;height:134px;opacity:.7;pointer-events:none}
+.botanical-top{top:17px;left:17px}
+.botanical-bottom{right:17px;bottom:17px;transform:rotate(180deg)}
+.botanical-stem{fill:none;stroke:#81917d;stroke-width:2;stroke-linecap:round}
+.botanical-leaf{fill:#dce4d5;stroke:#8d9b84;stroke-width:1}
+.botanical-bloom{fill:#bd7880;stroke:#a65b62;stroke-width:.8}
+.botanical-bloom .bloom-center{fill:#d9bd86;stroke:#ad8b58}
+.card-kicker,.card-recipient,.card-flower,.card-intro,.invitation-card h3,.card-message,.card-rule,.card-date,.card-time,.card-venue,.card-foot{position:relative;z-index:1}
+.card-kicker{margin-top:32px;color:#778575;letter-spacing:.24em}
+.card-flower{font-size:34px;color:#a98b66;margin:4px 0 17px}
+.card-intro{font-size:17px;color:#777a70;margin-bottom:14px}
+.invitation-card h3{font-size:clamp(39px,4.2vw,49px);color:#3c5949}
+.invitation-card h3 span{color:var(--ruby-soft)}
+.card-message{margin:14px 0 22px;color:#77796f}
+.card-rule{width:72%;margin-bottom:25px}
+.card-date{color:#526351;letter-spacing:.22em}
+.card-time{font-size:23px;color:#405747}
+.card-venue{line-height:2;color:#7b8176}
+.card-venue strong{color:#405747;letter-spacing:.14em}
+.card-foot{letter-spacing:.16em;color:#a09683}
+.card-download{z-index:4}
+@media(max-width:760px){.invitation-card{min-height:590px;padding:20px 18px 55px}.card-botanical{width:92px;height:115px;opacity:.58}.botanical-top{top:16px;left:16px}.botanical-bottom{right:16px;bottom:16px}}

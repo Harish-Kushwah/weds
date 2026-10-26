@@ -2,9 +2,10 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const dir = path.join(__dirname, 'images');
+const supportedExtensions = new Set(['.jpeg', '.jpg', '.png']);
 const files = fs.readdirSync(dir)
-  .filter((file) => file.toLowerCase().endsWith('.jpeg'))
-  .sort((a, b) => Number(a.slice(0, -5)) - Number(b.slice(0, -5)));
+  .filter((file) => supportedExtensions.has(path.extname(file).toLowerCase()))
+  .sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
 
 files.forEach((file, index) => {
   const temp = path.join(dir, `__rename_${index}.jpeg`);
