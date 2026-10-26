@@ -115,8 +115,10 @@
 
   <dialog class="photo-lightbox" id="photo-lightbox" aria-label="Photo viewer">
     <button class="lightbox-close" id="lightbox-close" aria-label="Close photo">×</button>
+    <button class="lightbox-navigation lightbox-previous" id="lightbox-prev" type="button" aria-label="Previous photo">‹</button>
     <img id="lightbox-image" alt="" />
-    <p id="lightbox-caption"></p>
+    <button class="lightbox-navigation lightbox-next" id="lightbox-next" type="button" aria-label="Next photo">›</button>
+    <p id="lightbox-caption" aria-live="polite"></p>
   </dialog>
 </body>
 </html>

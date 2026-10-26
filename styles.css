@@ -129,3 +129,6 @@ h1 em{color:var(--ruby-soft)}
 .card-foot{letter-spacing:.16em;color:#a09683}
 .card-download{z-index:4}
 @media(max-width:760px){.invitation-card{min-height:590px;padding:20px 18px 55px}.card-botanical{width:92px;height:115px;opacity:.58}.botanical-top{top:16px;left:16px}.botanical-bottom{right:16px;bottom:16px}}
+
+.lightbox-navigation{position:absolute;z-index:2;top:50%;transform:translateY(-50%);display:grid;width:48px;height:48px;border:1px solid #d8d1c1;border-radius:50%;background:#fbf9f3ef;color:#405b4a;font:400 34px/1 var(--serif);cursor:pointer;box-shadow:0 5px 16px #30291d24;transition:background .2s,color .2s,transform .2s}.lightbox-navigation:hover{background:#405b4a;color:#fff;transform:translateY(-50%) scale(1.06)}.lightbox-previous{left:34px}.lightbox-next{right:34px}.lightbox-navigation:focus-visible{outline:3px solid #ad8b58;outline-offset:3px}
+@media(max-width:600px){.lightbox-navigation{width:42px;height:42px;font-size:30px}.lightbox-previous{left:10px}.lightbox-next{right:10px}}

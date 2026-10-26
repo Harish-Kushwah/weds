@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-const TOTAL_PHOTOS = 56;
+const TOTAL_PHOTOS = 49;
 const weddingPhotos = Array.from({ length: TOTAL_PHOTOS }, (_, index) => `${index + 1}.jpeg`);
 
 const orbit = document.querySelector('#photo-orbit');
@@ -160,14 +160,31 @@ if (!reducedMotion && matchMedia('(pointer: fine)').matches) {
 const photoLightbox = document.querySelector('#photo-lightbox');
 const lightboxImage = document.querySelector('#lightbox-image');
 const lightboxCaption = document.querySelector('#lightbox-caption');
+let lightboxPhotoIndex = 0;
+
+function showLightboxPhoto(index) {
+  lightboxPhotoIndex = (index + TOTAL_PHOTOS) % TOTAL_PHOTOS;
+  lightboxImage.src = photoUrl(weddingPhotos[lightboxPhotoIndex]);
+  lightboxImage.alt = `Harish and Kavitha, photo ${lightboxPhotoIndex + 1}`;
+  lightboxCaption.textContent = `Harish & Kavitha · ${String(lightboxPhotoIndex + 1).padStart(2, '0')} / ${TOTAL_PHOTOS}`;
+}
+
 galleryGrid.addEventListener('click', (event) => {
   const button = event.target.closest('.gallery-item');
   if (!button) return;
-  const image = button.querySelector('img');
-  lightboxImage.src = image.src;
-  lightboxImage.alt = image.alt;
-  lightboxCaption.textContent = `Harish & Kavitha · ${String(Number(button.dataset.photoIndex) + 1).padStart(2, '0')}`;
+  showLightboxPhoto(Number(button.dataset.photoIndex));
   photoLightbox.showModal();
+});
+document.querySelector('#lightbox-prev').addEventListener('click', () => showLightboxPhoto(lightboxPhotoIndex - 1));
+document.querySelector('#lightbox-next').addEventListener('click', () => showLightboxPhoto(lightboxPhotoIndex + 1));
+photoLightbox.addEventListener('keydown', (event) => {
+  if (event.key === 'ArrowLeft') {
+    event.preventDefault();
+    showLightboxPhoto(lightboxPhotoIndex - 1);
+  } else if (event.key === 'ArrowRight') {
+    event.preventDefault();
+    showLightboxPhoto(lightboxPhotoIndex + 1);
+  }
 });
 document.querySelector('#lightbox-close').addEventListener('click', () => photoLightbox.close());
 photoLightbox.addEventListener('click', (event) => { if (event.target === photoLightbox) photoLightbox.close(); });
