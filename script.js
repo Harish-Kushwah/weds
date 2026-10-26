@@ -3,6 +3,8 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const TOTAL_PHOTOS = 49;
 const weddingPhotos = Array.from({ length: TOTAL_PHOTOS }, (_, index) => `${index + 1}.jpeg`);
+// The hero carousel uses a small set of varied portraits; the gallery below still shows every photo.
+const featuredPhotos = [2, 49, 1, 48, 47].map((number) => `${number}.jpeg`);
 
 const orbit = document.querySelector('#photo-orbit');
 const orbitTrack = document.querySelector('#photo-orbit-track');
@@ -29,12 +31,12 @@ const railLists = Array.from({ length: railCount }, () => {
 });
 
 function setActivePhoto(index) {
-  activePhoto = (index + weddingPhotos.length) % weddingPhotos.length;
+  activePhoto = (index + featuredPhotos.length) % featuredPhotos.length;
   const compactLayout = window.matchMedia('(max-width: 520px)').matches;
   [...orbitTrack.children].forEach((photo, photoIndex) => {
     let distance = photoIndex - activePhoto;
-    if (distance > weddingPhotos.length / 2) distance -= weddingPhotos.length;
-    if (distance < -weddingPhotos.length / 2) distance += weddingPhotos.length;
+    if (distance > featuredPhotos.length / 2) distance -= featuredPhotos.length;
+    if (distance < -featuredPhotos.length / 2) distance += featuredPhotos.length;
     const magnitude = Math.abs(distance);
     if (magnitude > (compactLayout ? 1 : 2)) {
       photo.style.opacity = '0';
@@ -54,22 +56,24 @@ function setActivePhoto(index) {
     photo.style.pointerEvents = magnitude === 0 ? 'auto' : 'none';
     photo.style.zIndex = String(10 - magnitude);
   });
-  photoCount.textContent = `${String(activePhoto + 1).padStart(2, '0')} / ${String(weddingPhotos.length).padStart(2, '0')}`;
+  photoCount.textContent = `${String(activePhoto + 1).padStart(2, '0')} / ${String(featuredPhotos.length).padStart(2, '0')}`;
 }
 
-weddingPhotos.forEach((filename, index) => {
-  const imageUrl = photoUrl(filename);
+featuredPhotos.forEach((filename, index) => {
   const orbitPhoto = document.createElement('div');
   orbitPhoto.className = 'orbit-photo';
   orbitPhoto.dataset.index = String(index);
   const orbitImage = document.createElement('img');
-  orbitImage.src = imageUrl;
-  orbitImage.alt = `Harish and Kavitha, photo ${index + 1}`;
-  orbitImage.loading = index < 4 ? 'eager' : 'lazy';
+  orbitImage.src = photoUrl(filename);
+  orbitImage.alt = `Harish and Kavitha, featured wedding photo ${index + 1}`;
+  orbitImage.loading = index < 3 ? 'eager' : 'lazy';
   orbitImage.decoding = 'async';
   orbitPhoto.append(orbitImage);
   orbitTrack.append(orbitPhoto);
+});
 
+weddingPhotos.forEach((filename, index) => {
+  const imageUrl = photoUrl(filename);
   const galleryButton = document.createElement('button');
   galleryButton.className = 'gallery-item reveal';
   galleryButton.type = 'button';
@@ -479,8 +483,8 @@ async function downloadInvitationCard(guestName) {
   centerText('✦', 743, '20px Georgia, serif', '#ad8b58');
   centerText('SATURDAY · 21 NOVEMBER 2026', 840, '600 18px "DM Sans", sans-serif', '#536351');
   centerText('at half past four', 915, '32px "Playfair Display", Georgia, serif', '#415649');
-  centerText('THE GLASSHOUSE GARDENS', 1015, '600 19px "DM Sans", sans-serif', '#4e5c4f');
-  centerText('SONOMA VALLEY · CALIFORNIA', 1060, '17px "DM Sans", sans-serif', '#81877a');
+  centerText('-', 1015, '600 19px "DM Sans", sans-serif', '#4e5c4f');
+  centerText('UTTAR PRADESH', 1060, '17px "DM Sans", sans-serif', '#81877a');
   centerText('DINNER, DANCING & ALL OUR FAVOURITE PEOPLE', 1170, '15px "DM Sans", sans-serif', '#aaa28f');
   const slug = guestName.toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'guest';
   canvas.toBlob((blob) => {
